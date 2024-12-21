@@ -1,0 +1,75 @@
+import json
+import streamlit as st
+import requests
+
+# Breast Cancer Prediction Slider Fields
+slider_fields = {
+    "radius_mean": [0, 30],
+    "texture_mean": [0, 50],
+    "perimeter_mean": [0, 200],
+    "area_mean": [0, 2500],
+    "smoothness_mean": [0.0, 0.3],
+    "compactness_mean": [0.0, 0.5],
+    "concavity_mean": [0.0, 0.5],
+    "concave_points_mean": [0.0, 0.2],
+    "symmetry_mean": [0.0, 0.5],
+    "fractal_dimension_mean": [0.0, 0.1],
+    "radius_se": [0, 5],
+    "texture_se": [0, 5],
+    "perimeter_se": [0, 10],
+    "area_se": [0, 100],
+    "smoothness_se": [0.0, 0.03],
+    "compactness_se": [0.0, 0.1],
+    "concavity_se": [0.0, 0.2],
+    "concave_points_se": [0.0, 0.05],
+    "symmetry_se": [0.0, 0.1],
+    "fractal_dimension_se": [0.0, 0.03],
+    "radius_worst": [0, 50],
+    "texture_worst": [0, 50],
+    "perimeter_worst": [0, 250],
+    "area_worst": [0, 3000],
+    "smoothness_worst": [0.0, 0.3],
+    "compactness_worst": [0.0, 1.0],
+    "concavity_worst": [0.0, 1.0],
+    "concave_points_worst": [0.0, 0.3],
+    "symmetry_worst": [0.0, 0.7],
+    "fractal_dimension_worst": [0.0, 0.1]
+}
+
+# Initialize user input dictionary
+user_inputs = {}
+
+# Streamlit App Title
+st.title("Breast Cancer Prediction App")
+
+# Sidebar for input sliders
+st.sidebar.header("Input Features")
+for feature_name, range_values in slider_fields.items():
+    min_val, max_val = range_values
+    default_val = (min_val + max_val) / 2  # Default value as midpoint
+    user_inputs[feature_name] = st.sidebar.slider(feature_name, min_val, max_val, value=float(default_val))
+
+# Display input data
+st.write("### Input Data:")
+st.json(user_inputs)
+
+# Predict button
+if st.button("Predict"):
+    # Prepare the payload for API
+    api_payload = {
+        "inputs": user_inputs
+    }
+
+    try:
+        # Replace '<your-api-endpoint>' with your actual API endpoint
+        api_url = "http://<your-api-endpoint>/predict/"
+        response = requests.post(api_url, json=api_payload)
+
+        if response.status_code == 200:
+            # Display the prediction result
+            prediction = response.json()
+            st.success(f"Prediction: {prediction['prediction']}")
+        else:
+            st.error(f"Error {response.status_code}: {response.text}")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Failed to connect to API: {e}")
