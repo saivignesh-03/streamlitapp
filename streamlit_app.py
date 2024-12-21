@@ -2,15 +2,39 @@ import json
 import streamlit as st
 import requests
 
-# Define the feature names and initialize the user inputs
-feature_names = [
-    "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean",
-    "compactness_mean", "concavity_mean", "concave_points_mean", "symmetry_mean", "fractal_dimension_mean",
-    "radius_se", "texture_se", "perimeter_se", "area_se", "smoothness_se", 
-    "compactness_se", "concavity_se", "concave_points_se", "symmetry_se", "fractal_dimension_se",
-    "radius_worst", "texture_worst", "perimeter_worst", "area_worst", "smoothness_worst",
-    "compactness_worst", "concavity_worst", "concave_points_worst", "symmetry_worst", "fractal_dimension_worst"
-]
+# Define the feature names and their initial values
+features = {
+    "radius_mean": 28.0,
+    "texture_mean": 35.0,
+    "perimeter_mean": 180.0,
+    "area_mean": 1500.0,
+    "smoothness_mean": 0.200,
+    "compactness_mean": 0.400,
+    "concavity_mean": 0.550,
+    "concave_points_mean": 0.300,
+    "symmetry_mean": 0.450,
+    "fractal_dimension_mean": 0.150,
+    "radius_se": 0.350,
+    "texture_se": 0.450,
+    "perimeter_se": 0.600,
+    "area_se": 0.800,
+    "smoothness_se": 0.100,
+    "compactness_se": 0.250,
+    "concavity_se": 0.350,
+    "concave_points_se": 0.500,
+    "symmetry_se": 0.700,
+    "fractal_dimension_se": 0.120,
+    "radius_worst": 25.0,
+    "texture_worst": 40.0,
+    "perimeter_worst": 200.0,
+    "area_worst": 1800.0,
+    "smoothness_worst": 0.250,
+    "compactness_worst": 0.450,
+    "concavity_worst": 0.600,
+    "concave_points_worst": 0.400,
+    "symmetry_worst": 0.550,
+    "fractal_dimension_worst": 0.200
+}
 
 # Title of the Streamlit app
 st.title('Breast Cancer Prediction')
@@ -20,8 +44,8 @@ user_inputs = {}
 
 # Sidebar sliders for user input for each feature
 st.sidebar.header("Input Features")
-for feature in feature_names:
-    user_inputs[feature] = st.sidebar.number_input(feature, value=0.0)
+for feature, default_value in features.items():
+    user_inputs[feature] = st.sidebar.number_input(feature, value=default_value)
 
 # Show the user inputs for review
 st.write("### Input Data:")
