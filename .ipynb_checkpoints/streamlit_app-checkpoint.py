@@ -36,7 +36,7 @@ if st.button('Predict'):
 
     try:
         # Send POST request to the FastAPI endpoint
-        response = requests.post('http://206.189.206.28:80/predict/', json=data)  # Replace with your API's endpoint
+        response = requests.post('http://206.189.206.28:8000/predict/', json=data)  # Replace with your API's endpoint
         
         if response.status_code == 200:
             # Display the prediction result
